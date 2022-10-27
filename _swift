@@ -1,0 +1,141 @@
+#compdef swift
+local context state state_descr line
+_swift_commandname=$words[1]
+typeset -A opt_args
+
+_swift() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'run:Build and run an executable product'
+                'package:Perform operations on Swift packages'
+                'help:Show subcommand help information.'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (run)
+                    _swift_run
+                    ;;
+                (package)
+                    _swift_package
+                    ;;
+                (help)
+                    _swift_help
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_swift_run() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--package-path[Specify the package path to operate on (default current directory). This changes the working directory before any other operation]:package-path:_files -/'
+        '--cache-path[Specify the shared cache directory path]:cache-path:_files -/'
+        '--config-path[Specify the shared configuration directory path]:config-path:_files -/'
+        '--security-path[Specify the shared security directory path]:security-path:_files -/'
+        '--scratch-path[Specify a custom scratch directory path (default .build)]:scratch-path:_files -/'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--package-path[Specify the package path to operate on (default current directory). This changes the working directory before any other operation]:package-path:_files -/'
+        '--cache-path[Specify the shared cache directory path]:cache-path:_files -/'
+        '--config-path[Specify the shared configuration directory path]:config-path:_files -/'
+        '--security-path[Specify the shared security directory path]:security-path:_files -/'
+        '--scratch-path[Specify a custom scratch directory path (default .build)]:scratch-path:_files -/'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'clean:Delete build artifacts'
+                ':'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (clean)
+                    _swift_package_clean
+                    ;;
+                ()
+                    _swift_package_
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_swift_package_clean() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':remaining:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_help() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':subcommands:'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+
+_custom_completion() {
+    local completions=("${(@f)$($*)}")
+    _describe '' completions
+}
+
+_swift

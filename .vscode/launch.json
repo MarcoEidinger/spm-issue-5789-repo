@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug Example",
+            "program": "${workspaceFolder:spm-issue-5789-repo}/.build/debug/Example",
+            "args": [],
+            "cwd": "${workspaceFolder:spm-issue-5789-repo}",
+            "preLaunchTask": "swift: Build Debug Example"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release Example",
+            "program": "${workspaceFolder:spm-issue-5789-repo}/.build/release/Example",
+            "args": [],
+            "cwd": "${workspaceFolder:spm-issue-5789-repo}",
+            "preLaunchTask": "swift: Build Release Example"
+        }
+    ]
+}
